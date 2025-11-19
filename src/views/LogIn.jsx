@@ -1,26 +1,27 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function LogIn() {
-  
   const { login, user } = useAuth();
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      await login(email, password)
-    } catch(error) {
-      setError(error.message)
+      await login(email, password);
+      navigate("/admin");
+    } catch (error) {
+      setError(error.message);
     }
-  }
+  };
 
   return (
     <div className="h-[30rem] mt-[5rem] w-[30rem] bg-white rounded-3xl flex flex-col items-center justify-center">
-      <h1 className="text-xl font-bold">
-        Log In to add events
-      </h1>
+      <h1 className="text-xl font-bold">Log In to add events</h1>
       <div className="w-full p-10 flex flex-col gap-3">
         <div>
           <p>Email</p>

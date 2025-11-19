@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function NavBar() {
+  const { user, logout } = useAuth();
+
   return (
     <div className="fixed w-dvw grid grid-cols-8 grid-rows-1 h-20 bg-[#004aad] text-white text-xl font-bold">
       {/* tamko logo */}
@@ -16,7 +19,11 @@ function NavBar() {
       </div>
 
       {/* Main nav items */}
-      <div className="col-span-4 flex justify-between items-center">
+      <div
+        className={`flex justify-between items-center ${
+          user ? "col-span-5" : "col-span-4"
+        }`}
+      >
         <Link to="/" className="flex gap-2 cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -85,26 +92,69 @@ function NavBar() {
           </svg>
           About
         </Link>
+
+        {/* admin panel if logged in */}
+        {user && (
+          <Link to="/admin" className="flex gap-2 cursor-pointer">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="white"
+              className="size-8"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z"
+              />
+            </svg>
+            Admin Panel
+          </Link>
+        )}
       </div>
 
-      {/* log in button */}
-      <div className="col-span-2 flex justify-end items-center pr-5">
-        <Link to="/login" className="cursor-pointer">
+      {/* log in / log out button */}
+      <div
+        className={`flex justify-end items-center pr-5 ${
+          user ? "col-span-1" : "col-span-2"
+        }`}
+      >
+        {user ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
+            onClick={logout}
             stroke="white"
-            className="size-8"
+            className="size-8 cursor-pointer"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+              d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
             />
           </svg>
-        </Link>
+        ) : (
+          <Link to="/login" className="cursor-pointer">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="white"
+              className="size-8"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+              />
+            </svg>
+          </Link>
+        )}
       </div>
     </div>
   );
