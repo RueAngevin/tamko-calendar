@@ -95,7 +95,7 @@ function Calendar() {
 
           <button className="ml-5 border-2 p-1 rounded-md cursor-pointer" onClick={toToday}>Today</button>
         </div>
-        <div className="flex justify-center items-center gap-3">
+        <div className="flex font-bold text-2xl justify-center items-center gap-3">
           <p>{CurrentDate.month}</p>
           <p>{CurrentDate.year}</p>
         </div>
