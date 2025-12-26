@@ -4,79 +4,99 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import iCalendarPlugin from "@fullcalendar/icalendar";
 
-
 function Calendar() {
   const calendarRef = useRef(null);
 
-  // dummy events
-  // const [events, setEvents] = useState([
-  //   { title: "Tamko Hangout", date: "2025-11-15", backgroundColor: "#2D9BF0" },
-
-  //   {title: "Subassociation Meeting", date: "2025-11-20",backgroundColor: "#27AE60",},
-  // ]);
-
+  // ICS proxy from Vercel
   const googleCalendarEvents = {
-    url: "https://calendar.google.com/calendar/ical/ruvindugamage%40gmail.com/public/basic.ics",
+    url: "https://tamko-calendar.vercel.app/api/googleCalendarProxy",
     format: "ics",
   };
-  
-  
 
   // state for month and year
   const now = new Date();
   const [CurrentDate, setCurrentDate] = useState({
-    month: now.toLocaleString("default", {month:"long"}),
-    year: now.getFullYear()
-  })
+    month: now.toLocaleString("default", { month: "long" }),
+    year: now.getFullYear(),
+  });
 
-  // function to update the header after each prev/next click
+  // update header after prev/next/today
   const updateHeader = () => {
     const api = calendarRef.current?.getApi();
     const newDate = api?.getDate();
 
     setCurrentDate({
-      month: newDate.toLocaleString("default", {month:"long"}),
+      month: newDate.toLocaleString("default", { month: "long" }),
       year: newDate.getFullYear(),
-    })
-  }
+    });
+  };
 
-  // alerts for clicked dates for now
+  // click on a date (currently just alert)
   const handleDateClick = (info) => {
     alert(`Clicked on date: ${info.dateStr}`);
   };
 
-  // previous month
+  // click on an event: show start–end, title, description
+  const handleEventClick = (clickInfo) => {
+    const event = clickInfo.event;
+    const startTime = event.start
+      ? event.start.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      : "";
+    const endTime = event.end
+      ? event.end.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      : "";
+
+    alert(
+      `${startTime} - ${endTime}\n` +
+        `${event.title}\n` +
+        `${event.extendedProps.description || "No description"}`
+    );
+  };
+
+  // navigation
   const prevMonth = () => {
     const api = calendarRef.current?.getApi();
     api?.prev();
     updateHeader();
   };
-
-  // next month
   const nextMonth = () => {
     const api = calendarRef.current?.getApi();
     api?.next();
     updateHeader();
   };
-
-  // return to today
   const toToday = () => {
     const api = calendarRef.current?.getApi();
     api?.today();
     updateHeader();
-  }
+  };
+
+  // optional: color by event keyword
+  const getEventColor = (event) => {
+    if (event.title.includes("Hangouts")) return "bg-green-500";
+    if (event.title.includes("Exam")) return "bg-red-500";
+    return "bg-blue-500";
+  };
 
   return (
     <div className="h-160 mt-20 w-280 bg-white rounded-3xl">
+      {/* header */}
       <div className="grid grid-cols-3 grid-rows-1 h-20">
-        <div className="flex justify-start pl-5 items-center">
+        <div className="flex justify-start pl-5 items-center gap-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-8 cursor-pointer"
+            className="w-8 h-8 cursor-pointer"
             onClick={prevMonth}
           >
             <path
@@ -92,7 +112,7 @@ function Calendar() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-8 cursor-pointer"
+            className="w-8 h-8 cursor-pointer"
             onClick={nextMonth}
           >
             <path
@@ -102,27 +122,19 @@ function Calendar() {
             />
           </svg>
 
-          <button className="ml-5 border-2 p-1 rounded-md cursor-pointer" onClick={toToday}>Today</button>
+          <button
+            className="ml-5 border-2 p-1 rounded-md cursor-pointer"
+            onClick={toToday}
+          >
+            Today
+          </button>
         </div>
         <div className="flex font-bold text-2xl justify-center items-center gap-3">
           <p>{CurrentDate.month}</p>
           <p>{CurrentDate.year}</p>
         </div>
         <div className="flex justify-end items-center pr-5">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-8"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
-            />
-          </svg>
+          {/* optional icon */}
         </div>
       </div>
 
@@ -135,7 +147,38 @@ function Calendar() {
           initialView="dayGridMonth"
           events={googleCalendarEvents}
           dateClick={handleDateClick}
+          eventClick={handleEventClick}
           height="32rem"
+          eventContent={(arg) => {
+            const { event } = arg;
+            const startTime = event.start
+              ? event.start.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
+              : "";
+            const endTime = event.end
+              ? event.end.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
+              : "";
+
+            return (
+              <div
+                className={`p-1 text-xs w-full text-white rounded-md whitespace-normal ${getEventColor(
+                  event
+                )}`}
+              >
+                <div className="font-bold">
+                  {startTime} - {endTime}
+                </div>
+                <div>{event.title}</div>
+              </div>
+            );
+          }}
         />
       </div>
     </div>
@@ -143,4 +186,3 @@ function Calendar() {
 }
 
 export default Calendar;
-
