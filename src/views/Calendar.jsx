@@ -2,16 +2,25 @@ import React, { useState, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import iCalendarPlugin from "@fullcalendar/icalendar";
+
 
 function Calendar() {
   const calendarRef = useRef(null);
 
   // dummy events
-  const [events, setEvents] = useState([
-    { title: "Tamko Hangout", date: "2025-11-15", backgroundColor: "#2D9BF0" },
+  // const [events, setEvents] = useState([
+  //   { title: "Tamko Hangout", date: "2025-11-15", backgroundColor: "#2D9BF0" },
 
-    {title: "Subassociation Meeting", date: "2025-11-20",backgroundColor: "#27AE60",},
-  ]);
+  //   {title: "Subassociation Meeting", date: "2025-11-20",backgroundColor: "#27AE60",},
+  // ]);
+
+  const googleCalendarEvents = {
+    url: "https://calendar.google.com/calendar/ical/ruvindugamage%40gmail.com/public/basic.ics",
+    format: "ics",
+  };
+  
+  
 
   // state for month and year
   const now = new Date();
@@ -58,7 +67,7 @@ function Calendar() {
   }
 
   return (
-    <div className="h-[40rem] mt-[5rem] w-[70rem] bg-white rounded-3xl">
+    <div className="h-160 mt-20 w-280 bg-white rounded-3xl">
       <div className="grid grid-cols-3 grid-rows-1 h-20">
         <div className="flex justify-start pl-5 items-center">
           <svg
@@ -121,10 +130,10 @@ function Calendar() {
       <div className="p-5">
         <FullCalendar
           ref={calendarRef}
-          plugins={[dayGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, interactionPlugin, iCalendarPlugin]}
           headerToolbar={false}
           initialView="dayGridMonth"
-          events={events}
+          events={googleCalendarEvents}
           dateClick={handleDateClick}
           height="32rem"
         />

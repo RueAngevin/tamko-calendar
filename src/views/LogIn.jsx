@@ -20,7 +20,7 @@ function LogIn() {
   };
 
   return (
-    <div className="h-[30rem] mt-[5rem] w-[30rem] bg-white rounded-3xl flex flex-col items-center justify-center">
+    <div className="h-120 mt-20 w-120 bg-white rounded-3xl flex flex-col items-center justify-center">
       <h1 className="text-xl font-bold">Log In to add events</h1>
       <div className="w-full p-10 flex flex-col gap-3">
         <div>

@@ -1,8 +1,10 @@
 function AdminPanel () {
 
     return(
-        <div>
-            <p>admin panel</p>
+        <div className="h-160 mt-20 w-280 bg-white rounded-3xl">
+            
+            
+
         </div>
     )
 

@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.19",
+    "@fullcalendar/icalendar": "^6.1.20",
     "@fullcalendar/interaction": "^6.1.19",
     "@fullcalendar/react": "^6.1.19",
     "@fullcalendar/timegrid": "^6.1.19",
     "@tailwindcss/vite": "^4.1.17",
     "firebase": "^12.6.0",
+    "ical.js": "^1.5.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.6",
