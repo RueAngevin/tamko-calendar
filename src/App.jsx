@@ -14,7 +14,7 @@ function App() {
   return (
     <>
       <NavBar />
-      <div className="bg-[#b4c8ff] h-dvh flex items-center justify-center">
+      <div className="bg-[#b4c8ff] pt-25 min-h-dvh flex items-center justify-center">
         <Routes>
           <Route path="/" element={<Calendar />}></Route>
           <Route path="/about" element={<About />}></Route>
